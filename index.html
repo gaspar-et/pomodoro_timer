@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pomodoro Timer</title>
+
+  <!-- ✅ Tailwind Play CDN (latest version) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- ✅ Tailwind config to add Akashi font -->
+  <script>
+    tailwind.config = {
+        darkMode: 'class', // manual class-based toggle
+      theme: {
+        extend: {
+          fontFamily: {
+            akashi: ["'Akashi'", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- ✅ Link to your custom font (Akashi) -->
+  <style>
+    @font-face {
+      font-family: 'Akashi';
+      src: url('./fonts/Akashi.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+  </style>
+
+  <!-- ✅ JavaScript file -->
+  <script src="script.js" defer></script>
+</head>
+
+<body class="bg-gray-900 text-white dark:bg-white dark:text-gray-900 min-h-screen flex items-center justify-center">
+  <div class="text-center space-y-8">
+    
+    <!-- Dark/Light mode Button -->
+    <button id="theme-toggle" class="text-sm underline hover:text-gray-300 transition">
+        Toggle Dark/Light Mode
+    </button>
+
+    <!-- Title -->
+    <h1 id="mode-title" class="text-4xl font-bold">START WORK</h1>
+
+
+    <!-- Timer Display -->
+    <div id="timer" class="text-9xl font-akashi mx-auto">50:00</div>
+
+    <!-- Pomodoro Cycle Count -->
+    <div class="text-lg">Pomodoros Completed: <span id="cycle-count">0</span> / 4</div>
+
+    <div class="text-lg">Pomodoro Combo: <span id="combo-count">0</span></div>
+
+    <!-- Buttons -->
+    <div class="space-x-4">
+      <button onclick="startTimer()" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded">Start</button>
+      <button onclick="pauseTimer()" class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded">Pause</button>
+      <button onclick="resetTimer()" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded">Reset</button>
+    </div>
+  </div>
+</body>
+</html>
