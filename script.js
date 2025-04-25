@@ -4,6 +4,9 @@ const cycleCountDisplay = document.getElementById("cycle-count");
 const modeTitle = document.getElementById("mode-title");
 const themeToggleBtn = document.getElementById("theme-toggle");
 const comboCountDisplay = document.getElementById("combo-count");
+const timerEl = document.getElementById("timer");
+const timerBox = document.getElementById("timer-box");
+const progressBar = document.getElementById("progress-bar");
 
 // Timer values
 let workDuration = 50*60;
@@ -21,6 +24,16 @@ function updateDisplay() {
     const minutes = Math.floor(currentTime / 60).toString().padStart(2, "0");
     const seconds = (currentTime % 60).toString().padStart(2, "0");
     timerDisplay.textContent = `${minutes}:${seconds}`;
+
+    if (!isBreak) {
+        const progress = 100 - (currentTime / workDuration) * 100;
+        progressBar.style.width = `${progress}%`;
+        progressBar.className = "h-full bg-green-500 transition-all duration-300 ease-in-out";
+    } else {
+        const progress = (currentTime / breakDuration) * 100;
+        progressBar.style.width = `${progress}%`;
+        progressBar.className = "h-full bg-blue-500 transition-all duration-300 ease-in-out";
+    }
 }
 
 // Start the timer
@@ -34,6 +47,11 @@ function startTimer() {
             ? "LONG BREAK"
             : "BREAK TIME..."
         : "WORK TIME!"
+        if (!isBreak) {
+            timerBox.classList.add("animate-pulse");
+          } else {
+            timerBox.classList.remove("animate-pulse");
+          }
   
     interval = setInterval(() => {
         if (currentTime > 0) {
@@ -88,6 +106,7 @@ function pauseTimer() {
   clearInterval(interval);
   isRunning = false;
   modeTitle.textContent = "TIMER PAUSED";
+  timerBox.classList.remove("animate-pulse");
 }
 
 function resetTimer() {
@@ -96,10 +115,27 @@ function resetTimer() {
   isBreak = false;
   currentTime = workDuration;
   pomodoroCount = 0;
+  comboCount = 0;
+
   updateDisplay();
   cycleCountDisplay.textContent = pomodoroCount;
+  comboCountDisplay.textContent = comboCount;
   modeTitle.textContent = "START WORK";
+  progressBar.style.width = `0%`;
+  progressBar.className = "h-full bg-green-500 transition-all duration-300 ease-in-out";
+  timerBox.classList.remove("animate-pulse");
 }
+
+//Change font Toggle
+timerEl.addEventListener("click", () => {
+    if (timerEl.classList.contains("font-raw")) {
+      timerEl.classList.remove("font-raw");
+      timerEl.classList.add("font-render");
+    } else {
+      timerEl.classList.remove("font-render");
+      timerEl.classList.add("font-raw");
+    }
+});
 
 // Dark Mode Toggle
 themeToggleBtn.addEventListener("click", () => {

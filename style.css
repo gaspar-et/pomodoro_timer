@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'Akashi';
+    src: url('./fonts/Akashi.ttf') format('truetype');
+  }
+  
+  .custom-font {
+    font-family: 'Akashi', sans-serif;
+  }
