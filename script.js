@@ -8,6 +8,17 @@ const timerEl = document.getElementById("timer");
 const timerBox = document.getElementById("timer-box");
 const progressBar = document.getElementById("progress-bar");
 
+// DOM elements Settings
+const settingsToggleBtn = document.getElementById("settings-toggle");
+const settingsPanel = document.getElementById("settings-panel");
+const settingsModal = document.getElementById("settings-modal");
+const saveSettingsBtn = document.getElementById("save-settings");
+const cancelSettingsBtn = document.getElementById("cancel-settings");
+
+const workInput = document.getElementById("work-duration-input");
+const breakInput = document.getElementById("break-duration-input");
+const longBreakInput = document.getElementById("longbreak-duration-input");
+
 // Timer values
 let workDuration = 50*60;
 let breakDuration = 10*60;
@@ -159,4 +170,53 @@ window.addEventListener("DOMContentLoaded", () => {
   modeTitle.textContent = "START WORK";
   cycleCountDisplay.textContent = pomodoroCount;
   comboCountDisplay.textContent = comboCount;
+});
+
+// Settings Panel
+settingsToggleBtn.addEventListener("click", () => {
+  settingsPanel.classList.remove("pointer-events-none", "hidden");
+  setTimeout(() => {
+    settingsModal.classList.remove("scale-95", "opacity-0");
+    settingsModal.classList.add("scale-100", "opacity-100");
+    settingsPanel.classList.remove("opacity-0");
+    settingsPanel.classList.add("opacity-100");
+  }, 10);
+});
+
+cancelSettingsBtn.addEventListener("click", () => {
+  settingsModal.classList.remove("scale-100", "opacity-100");
+  settingsModal.classList.add("scale-95", "opacity-0");
+  settingsPanel.classList.remove("opacity-100");
+  settingsPanel.classList.add("opacity-0");
+  setTimeout(() => {
+    settingsPanel.classList.add("pointer-events-none", "hidden");
+  }, 300);
+});
+
+saveSettingsBtn.addEventListener("click", () => {
+  const newWorkMinutes = parseInt(workInput.value);
+  const newBreakMinutes = parseInt(breakInput.value);
+  const newLongBreakMinutes = parseInt(longBreakInput.value);
+
+  if (!isNaN(newWorkMinutes) && newWorkMinutes > 0) {
+    workDuration = newWorkMinutes * 60; // convert to seconds
+  }
+  if (!isNaN(newBreakMinutes) && newBreakMinutes > 0) {
+    breakDuration = newBreakMinutes * 60; // convert to seconds
+  }
+
+  if (!isNaN(newBreakMinutes) && newBreakMinutes > 0) {
+    longBreakDuration = newLongBreakMinutes * 60; // convert to seconds
+  }
+
+  currentTime = workDuration;
+  updateDisplay();
+  
+  settingsModal.classList.remove("scale-100", "opacity-100");
+  settingsModal.classList.add("scale-95", "opacity-0");
+  settingsPanel.classList.remove("opacity-100");
+  settingsPanel.classList.add("opacity-0");
+  setTimeout(() => {
+    settingsPanel.classList.add("pointer-events-none", "hidden");
+  }, 300);
 });
