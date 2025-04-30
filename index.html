@@ -148,6 +148,34 @@
                  border border-gray-700 dark:border-gray-200"
         >
       </div>
+
+      <div class="space-y-2 pt-4">
+        <label class="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
+          <input id="auto-start-break" type="checkbox" class="form-checkbox h-4 w-4 text-green-500">
+          <span>Auto-start Break Sessions</span>
+        </label>
+      
+        <label class="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
+          <input id="auto-start-work" type="checkbox" class="form-checkbox h-4 w-4 text-green-500">
+          <span>Auto-start Work Sessions</span>
+        </label>
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-gray-700 dark:text-gray-300">Work End Sound:</label>
+        <select id="work-sound-select" class="w-full p-2 rounded bg-white text-black border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600">
+          <option value="work_end.mp3">Beep</option>
+          <option value="none">None</option>
+        </select>
+      </div>
+      
+      <div class="space-y-2">
+        <label class="block text-gray-700 dark:text-gray-300">Break End Sound:</label>
+        <select id="break-sound-select" class="w-full p-2 rounded bg-white text-black border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600">
+          <option value="break_end.mp3">Ding</option>
+          <option value="none">None</option>
+        </select>
+      </div>
   
       <div class="flex justify-between pt-4">
         <button id="save-settings" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Save</button>
@@ -155,6 +183,9 @@
       </div>
     </div>
   </div>
+
+  <audio id="work-end-sound" src="./sounds/work_end.mp3"></audio>
+  <audio id="break-end-sound" src="./sounds/break_end.mp3"></audio>
 
 </body>
 </html>

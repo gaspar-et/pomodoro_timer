@@ -19,6 +19,16 @@ const workInput = document.getElementById("work-duration-input");
 const breakInput = document.getElementById("break-duration-input");
 const longBreakInput = document.getElementById("longbreak-duration-input");
 
+const workEndSound = document.getElementById("work-end-sound");
+const breakEndSound = document.getElementById("break-end-sound");
+const workSoundSelect = document.getElementById("work-sound-select");
+const breakSoundSelect = document.getElementById("break-sound-select");
+const autoStartBreakCheckbox = document.getElementById("auto-start-break");
+const autoStartWorkCheckbox = document.getElementById("auto-start-work");
+
+let autoStartBreak = false;
+let autoStartWork = false;
+
 // Timer values
 let workDuration = 50*60;
 let breakDuration = 10*60;
@@ -41,7 +51,7 @@ function updateDisplay() {
         progressBar.style.width = `${progress}%`;
         progressBar.className = "h-full bg-green-500 transition-all duration-300 ease-in-out";
     } else {
-        const progress = (currentTime / breakDuration) * 100;
+        const progress = (currentTime / (pomodoroCount >= 4 ? longBreakDuration : breakDuration)) * 100;
         progressBar.style.width = `${progress}%`;
         progressBar.className = "h-full bg-blue-500 transition-all duration-300 ease-in-out";
     }
@@ -74,41 +84,41 @@ function startTimer() {
   
             if (!isBreak) {
                 // Work session ended
+                workEndSound.play();
+                isBreak = true;
                 pomodoroCount++;
                 cycleCountDisplay.textContent = pomodoroCount;
-                
-                if (pomodoroCount >= 4) {
-                    //Add combo count
-                    comboCount++;
-                    comboCountDisplay.textContent = comboCount;
-                    
-                    // Trigger long break
-                    currentTime = longBreakDuration;
-                    modeTitle.textContent = "LONG BREAK";
+                currentTime = pomodoroCount >= 4 ? longBreakDuration : breakDuration;
+                modeTitle.textContent = pomodoroCount >= 4 ? "LONG BREAK" : "BREAK TIME...";
+                updateDisplay();
+
+                if (autoStartBreak) {
+                  startTimer(); // auto-start break
                 } else {
-                    // Regular short break
-                    currentTime = breakDuration;
-                    modeTitle.textContent = "BREAK TIME...";
+                  isRunning = false;
                 }
-                
-                isBreak = true;
             } else {
                 // End of break (short or long)
+                breakEndSound.play();
                 isBreak = false;
-                currentTime = workDuration;
-            
             
                 // After long break, reset pomodoro counter
                 if (pomodoroCount >= 4) {
                     pomodoroCount = 0;
                     cycleCountDisplay.textContent = pomodoroCount;
+                    comboCount++;
+                    comboCountDisplay.textContent = comboCount;
                 }
-  
-            
+                currentTime = workDuration;
                 modeTitle.textContent = "WORK TIME!";
+                updateDisplay();
+                
+                if (autoStartWork) {
+                  startTimer(); // auto-start work
+                } else {
+                  isRunning = false
+                }
             }
-            
-            updateDisplay();
         }
     }, 1000);
 }
@@ -194,9 +204,14 @@ cancelSettingsBtn.addEventListener("click", () => {
 });
 
 saveSettingsBtn.addEventListener("click", () => {
-  const newWorkMinutes = parseInt(workInput.value);
-  const newBreakMinutes = parseInt(breakInput.value);
-  const newLongBreakMinutes = parseInt(longBreakInput.value);
+  const newWorkMinutes = parseFloat(workInput.value);
+  const newBreakMinutes = parseFloat(breakInput.value);
+  const newLongBreakMinutes = parseFloat(longBreakInput.value);
+  const selectedWorkSound = workSoundSelect.value;
+  const selectedBreakSound = breakSoundSelect.value;
+
+  autoStartBreak = autoStartBreakCheckbox.checked;
+  autoStartWork = autoStartWorkCheckbox.checked;
 
   if (!isNaN(newWorkMinutes) && newWorkMinutes > 0) {
     workDuration = newWorkMinutes * 60; // convert to seconds
@@ -211,6 +226,18 @@ saveSettingsBtn.addEventListener("click", () => {
 
   currentTime = workDuration;
   updateDisplay();
+
+  if (selectedWorkSound !== "none") {
+    workEndSound.src = `./sounds/${selectedWorkSound}`;
+  } else {
+    workEndSound.src = ""; // disable sound
+  }
+  
+  if (selectedBreakSound !== "none") {
+    breakEndSound.src = `./sounds/${selectedBreakSound}`;
+  } else {
+    breakEndSound.src = "";
+  }
   
   settingsModal.classList.remove("scale-100", "opacity-100");
   settingsModal.classList.add("scale-95", "opacity-0");
