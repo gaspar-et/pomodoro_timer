@@ -23,6 +23,8 @@ const workEndSound = document.getElementById("work-end-sound");
 const breakEndSound = document.getElementById("break-end-sound");
 const workSoundSelect = document.getElementById("work-sound-select");
 const breakSoundSelect = document.getElementById("break-sound-select");
+const workVolumeSlider = document.getElementById("work-volume");
+const breakVolumeSlider = document.getElementById("break-volume");
 const autoStartBreakCheckbox = document.getElementById("auto-start-break");
 const autoStartWorkCheckbox = document.getElementById("auto-start-work");
 
@@ -209,6 +211,9 @@ saveSettingsBtn.addEventListener("click", () => {
   const newLongBreakMinutes = parseFloat(longBreakInput.value);
   const selectedWorkSound = workSoundSelect.value;
   const selectedBreakSound = breakSoundSelect.value;
+  
+  workEndSound.volume = parseFloat(workVolumeSlider.value);
+  breakEndSound.volume = parseFloat(breakVolumeSlider.value);
 
   autoStartBreak = autoStartBreakCheckbox.checked;
   autoStartWork = autoStartWorkCheckbox.checked;
@@ -247,3 +252,15 @@ saveSettingsBtn.addEventListener("click", () => {
     settingsPanel.classList.add("pointer-events-none", "hidden");
   }, 300);
 });
+
+function testWorkSound() {
+  workEndSound.currentTime = 0;
+  workEndSound.volume = parseFloat(workVolumeSlider.value);
+  workEndSound.play();
+}
+
+function testBreakSound() {
+  breakEndSound.currentTime = 0;
+  breakEndSound.volume = parseFloat(breakVolumeSlider.value);
+  breakEndSound.play();
+}
